@@ -1,0 +1,125 @@
+    user_prompt = f"""
+    Question:
+    Extract the following information as a JSON object with keys in snake case and extracted values as strings for an invoice text document.
+
+    Examples:
+    Example Invoice Text: 
+    "Invoice #INV123456, Date: 05/28/2023, Total: $567.89, Net: $500.00, VAT: $67.89, Vendor: ABC Supplies, 
+    Address: 123 Main St, Branch Code: 123456, Account Number: 123456789, Bank: FNB."
+
+    Expected Output:
+    {{
+        "vendor_invoice_id": "INV123456",
+        "purchase_order_number": "",
+        "vendor_tax_id": "",
+        "vendor_registration_number": "",
+        "invoice_date": "05/28/2023",
+        "total_amount": "$567.89",
+        "net_amount": "$500.00",
+        "tax_amount": "$67.89",
+        "vendor_address": "123 Main St",
+        "bank_name": "FNB",
+        "bank_branch_code": "123456",
+        "bank_account_number": "123456789",
+        "vendor_name": "ABC Supplies"
+    }}
+
+    Example Invoice Text: 
+    "Invoice: Tax Invoice 987654, PO No: 4501234567, Issue Date: 15/06/2022, Total: R1,234.00, 
+    Net: R1,100.00, VAT: R134.00, Vendor: XYZ Industries, Address: 456 Park Ave, 
+    Branch Code: 789012, Account Number: 987654321, Bank: Nedbank."
+
+    Expected Output:
+    {{
+        "vendor_invoice_id": "987654",
+        "purchase_order_number": "4501234567",
+        "vendor_tax_id": "",
+        "vendor_registration_number": "",
+        "invoice_date": "15/06/2022",
+        "total_amount": "R1,234.00",
+        "net_amount": "R1,100.00",
+        "tax_amount": "R134.00",
+        "vendor_address": "456 Park Ave",
+        "bank_name": "Nedbank",
+        "bank_branch_code": "789012",
+        "bank_account_number": "987654321",
+        "vendor_name": "XYZ Industries"
+    }}
+
+    Now, extract the information from the following invoice text:
+    {input_text}
+    """
+
+
+    user_prompt =  f"""
+    Question:
+    Extract the following information as a JSON object with keys in snake case and extracted values as strings for an invoice text document:
+        - Invoice number or document number or tax invoice number (vendor_invoice_id): [extracted value]
+        - Your reference number or purchase order number or external order number (a 10 digit code that starts with a 450) (purchase_order_number): [extracted value]
+        - Vendor VAT or tax reference number (a 10 digit code) (vendor_tax_id): [extracted value]
+        - vendor/company registration number (vendor_registration_number): [extracted value]
+        - Issue date (invoice_date) in formats MM/DD/YYYY or DD/MM/YYYY: [extracted value]
+        - Total amount in currency format (total_amount): [extracted value]
+        - Net amount in currency format (net_amount): [extracted value]
+        - VAT or tax amount in currency format (tax_amount): [extracted value]
+        - Vendor address (excluding city of Cape Town) (vendor_address): [extracted value]
+        - Bank name (e.g., ABSA, FNB, Standard Bank, Nedbank, Capitec) (bank_name): [extracted value]
+        - Bank branch code (6 digits) (bank_branch_code): [extracted value]
+        - Bank account number (8-12 digits) (bank_account_number): [extracted value]
+        - Sort code (6 digits) (sort_code): [extracted value]
+        - Vendor or company name (excluding city of Cape Town) (vendor_name): [extracted value]
+    
+    from the following invoice text: {input_text}
+    """
+
+# different Example
+    user_prompt = f"""
+    Question:
+    Extract the following information as a JSON object with keys in snake case and extracted values as strings for an invoice text document.
+
+    Examples:
+    Example Invoice Text: 
+    "Invoice WI24633, Date: 18/12/2019, Total: 6720.95, Net: 5844.3, VAT: 876.65, Vendor: auto magneto (pty) ltd, VAT No: 4780260149, vendor registration no: 2011/134169/07,
+    Address: po box 38657 | pinelands | 7430\nold mill square\n50 old mill road, Branch Code: 020909, Account Number: 070053669, Bank: standard bank"
+
+    Expected Output:
+    {{
+        'vendor_name': 'auto magneto (pty) ltd',
+        'vendor_invoice_id': 'WI24633',
+        'invoice_date': '2019-12-18',
+        'vendor_tax_id': '4780260149',
+        'vendor_registration_number': '2011/134169/07',
+        'purchase_order_number': '4503630036',
+        'bank_name': 'standard bank',
+        'bank_account_number': '070053669',
+        'bank_branch_code': '020909',
+        'net_amount': 5844.3,
+        'total_amount': 6720.95,
+        'tax_amount': 876.65,
+        'address': "po box 38657 | pinelands | 7430\nold mill square\n50 old mill road\nn'dabeni\ntel no: 021 531 8144 fax no: 021 531 9666"
+    }}
+
+    Example Invoice Text: 
+    "Invoice 40932, Date: 10/03/2017, Total: 399.0, Net: 350.0, VAT: 49.0, Vendor: vicron, VAT No: 4850179138, vendor registration no: 99/01257/23,
+    Address: p . o . box 13278, n1 city, 7463, Branch Code: 201410, Account Number: 62007091391, Bank: first national bank"
+
+    Expected Output:
+    {{
+        'vendor_name': 'vicron',
+        'vendor_invoice_id': '40932',
+        'invoice_date': '2017-03-10',
+        'vendor_tax_id': '4850179138',
+        'vendor_registration_number': '99/01257/23',
+        'purchase_order_number': '4503101148',
+        'bank_name': 'first national bank',
+        'bank_account_number': '62007091391',
+        'bank_branch_code': '201410',
+        'net_amount': 350.0,
+        'total_amount': 399.0,
+        'tax_amount': 49.0,
+        'address': 'p . o . box 13278, n1 city, 7463'
+    }}
+
+    Now, extract the information from the following invoice text:
+    {input_text}
+    """

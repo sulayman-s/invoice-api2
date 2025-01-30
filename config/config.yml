@@ -1,0 +1,14 @@
+bucket: 
+    inv_data: fleet-data-pipeline.invoice-data
+    vendor_data: fleet-data-pipeline.purchase-requisition-purchase-order-items
+    vendor_line: fleet-data-pipeline.purchase-order-invoice-email-data
+    vendor_acc: invoice-data-processing.vendor-accounts
+    vendor_loc: fleet-data-pipeline.sap-vendor-locations
+    inv_pdf: fleet-data-pipeline.invoice-examples
+    extracted: rvanwyk18.invoice-extracts
+    extracted_checks: rvanwyk18.invoice-extracts-validations
+    validation_data: invoice-data-processing.invoice-validation-data
+    inv_ocr: rvanwyk18.invoice-ocr
+    inv_llm: rvanwyk18.invoice-llm-extract
+    inv_ocr_pdf: rvanwyk18.invoice-ocr-pdf
+    inv_ocr_img: rvanwyk18.invoice-ocr-img

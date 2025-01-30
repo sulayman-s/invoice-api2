@@ -1,0 +1,82 @@
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: invoice-api-dev
+
+---
+# StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: invoice-api-backend-dev
+  namespace: invoice-api-dev
+spec:
+  serviceName: invoice-api-backend-dev
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invoice-api-backend-dev
+  template:
+    metadata:
+      labels:
+        app: invoice-api-backend-dev
+    spec:
+      containers:
+      - name: invoice-api-backend
+        image: cityofcapetown/invoice-api-backend:dev-branch
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: "openai_api_key"
+        - name: PROXY_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: "proxy_username"
+        - name: PROXY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: invoice-api-secrets
+              key: "proxy_password"
+
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: invoice-api-backend-dev
+  namespace: invoice-api-dev
+spec:
+  selector:
+    app: invoice-api-backend-dev
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+
+---
+# Traefik Ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: invoice-api-ingress
+  namespace: invoice-api-dev
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/rule-type: "PathPrefixStrip"
+spec:
+  rules:
+    - host: datascience.capetown.gov.za
+      http:
+        paths:
+          - path: /invoice-api-backend-dev
+            backend:
+              serviceName: invoice-api-backend-dev
+              servicePort: 8000
